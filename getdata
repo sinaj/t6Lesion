@@ -1,0 +1,20 @@
+function [X,Y] = getData
+[t1,scaninfo] = loadminc('t1_ai_msles2_1mm_pn3_rf20.mnc');
+[pd,scaninfo] = loadminc('pd_ai_msles2_1mm_pn3_rf20.mnc');
+[t2,scaninfo] = loadminc('t1_ai_msles2_1mm_pn3_rf20.mnc');
+
+iteration=size(pd,3);
+X=zeros([size(pd) 3]);
+[Y,scaninfo] = loadminc('brainweb.mnc');
+for i = 1:iteration
+      pd_temp = pd(:,:,iteration);
+      t1_temp = t1(:,:,iteration);
+      t2_temp = t2(:,:,iteration);
+      X(:,:,iteration,1)= (edge(t1(:,:,iteration),'sobel','horizontal').^2)+(edge(t1(:,:,iteration),'sobel','vertical').^2);
+      X(:,:,iteration,2)= (edge(pd(:,:,iteration),'sobel','horizontal').^2)+(edge(pd(:,:,iteration),'sobel','vertical').^2);
+      X(:,:,iteration,3)= (edge(t2(:,:,iteration),'sobel','horizontal').^2)+(edge(t2(:,:,iteration),'sobel','vertical').^2);
+       
+      
+        
+end
+end
