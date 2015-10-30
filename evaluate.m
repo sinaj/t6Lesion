@@ -11,6 +11,7 @@ function [measureVal] = evaluate(groundTruth, detections, measure)
 %   "sensitivity"
 %   "specificity" 
 %   "accuracy"
+%   "detections" The number of lesions that we had detections inside.
 
 % My approach to determining True Positives (TP), True Negatives (TN),
 % False Positives (FP) and False Negatives(FN) is similar to the approach
@@ -43,6 +44,17 @@ switch measure
         
     case 'accuracy'
         measureVal = (tPos + tNeg) / (tPos + fPos + fNeg + tNeg);
+        
+    case 'detections'
+        [labelled, nLabelled] = bwlabeln(groundTruth);
+        labelled = labelled .* (-1 * detections);
+        
+        % Count the number of different negative numbers. This is our
+        % detections.
+        [a, values] = hist(labelled, unique(labelled));
+        nNeg = sum(values < 0);
+        
+        measureVal = nNeg / nLabelled;
         
     otherwise
         fprintf('Error: unknown measure paramater %s.', measure);
