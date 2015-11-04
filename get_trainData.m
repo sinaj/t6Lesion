@@ -10,7 +10,7 @@
 %           X(1:217,:,:), i.e., 217 x 181 x 4
 % Output Y is just slices of MRI scan with Lesion data - 217 x 181 x 181
 
-function [X,Y] = get_trainData
+function [X,Y] = get_trainData()
 [PD,scaninfo] = loadminc('pd_ai_msles2_1mm_pn3_rf20.mnc');
 [T2,scaninfo] = loadminc('t2_ai_msles2_1mm_pn3_rf20.mnc');
 [T1,scaninfo] = loadminc('t1_ai_msles2_1mm_pn3_rf20.mnc');
