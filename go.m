@@ -4,7 +4,7 @@ addpath classification
 addpath evaluation
 
 force_refresh_data = false;
-training_model = 'svm';
+training_model = 'RF';
 
 %% ================= Extract featrues from the data =======================
 
@@ -20,6 +20,12 @@ end
 X_train = reshape(X, size(X, 1) * size(X, 2), size(X, 3));
 Y_train = round(Y(:));
 Y_train(isnan(Y_train)) = 0;
+mu = mean(X_train);
+X_train = bsxfun(@minus, X_train, mu);
+
+%sigma = std(X_train);
+%X_train = bsxfun(@rdivide, X_train, sigma);
+X_train = bsxfun(@rdivide, X_train, max(max(X_train)));
 
 % Get some two exclusive samples from the data as train and test
 [X_train_sample, Y_train_sample, X_test_sample, Y_test_sample] = sample_data(X_train, Y_train);
@@ -44,6 +50,10 @@ disp('done.');
 
 % Evaluate the result
 disp('Evaluating...');
-fprintf('Acc: %.4f\n', evaluate(Y_test_sample, labels, 'accuracy'));
+fprintf('ACC: %f\n', evaluate(Y_test_sample, labels, 'accuracy'));
+fprintf('DSC: %f\n', evaluate(Y_test_sample, labels, 'dsc'));
+fprintf('Sen: %f\n', evaluate(Y_test_sample, labels, 'sensitivity'));
+fprintf('Spe: %f\n', evaluate(Y_test_sample, labels, 'specificity'));
+fprintf('det: %f\n', evaluate(Y_test_sample, labels, 'detections'));
 
 
