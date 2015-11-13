@@ -12,6 +12,10 @@ function [measureVal] = evaluate(groundTruth, detections, measure)
 %   "specificity" 
 %   "accuracy"
 %   "detections" The number of lesions that we had detections inside.
+%   "tp" true positives
+%   "tn" true negatives
+%   "fp" false positives
+%   "fn" false negatives
 
 % My approach to determining True Positives (TP), True Negatives (TN),
 % False Positives (FP) and False Negatives(FN) is similar to the approach
@@ -33,6 +37,18 @@ fPos = counts(3);
 fNeg = counts(4);
 
 switch measure
+    case 'tp'
+        measureVal = tPos;
+        
+    case 'tn'
+        measureVal = tNeg;
+    
+    case 'fp'
+        measureVal = fPos;
+        
+    case 'fn'
+        measureVal = fNeg;
+        
     case 'dsc'
         measureVal = (2 * tPos) / (fPos + fNeg + 2 * tPos);
         
