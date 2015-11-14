@@ -9,11 +9,13 @@ X = X(:, 1:156);
 pos_ind = Y == 1;
 neg_ind = Y == 0;
 
-pos_ind_train = [ones(24000, 1); zeros(length(Y)-24000, 1)] .* pos_ind;
-pos_ind_test = [zeros(24000, 1); ones(length(Y)-24000, 1)] .* pos_ind;
+train_size = 24000;
 
-neg_ind_train = [ones(24000, 1); zeros(length(Y)-24000, 1)] .* neg_ind;
-neg_ind_test = [zeros(24000, 1); ones(length(Y)-24000, 1)] .* neg_ind;
+pos_ind_train = [ones(train_size, 1); zeros(length(Y)-train_size, 1)] .* pos_ind;
+pos_ind_test = [zeros(train_size, 1); ones(length(Y)-train_size, 1)] .* pos_ind;
+
+neg_ind_train = [ones(train_size, 1); zeros(length(Y)-train_size, 1)] .* neg_ind;
+neg_ind_test = [zeros(train_size, 1); ones(length(Y)-train_size, 1)] .* neg_ind;
 
 ind_train = logical(pos_ind_train) | logical(neg_ind_train);
 ind_test = logical(pos_ind_test) | logical(neg_ind_test);
