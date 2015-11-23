@@ -30,11 +30,10 @@ measureVal = 0;
 
 accuracyMatrix = abs(3 * groundTruth - 2 * detections);
 
-[counts, centers] = hist(accuracyMatrix(:), 4);
-tNeg = counts(1);
-tPos = counts(2);
-fPos = counts(3);
-fNeg = counts(4);
+tNeg = sum(accuracyMatrix(:) == 0);
+tPos = sum(accuracyMatrix(:) == 1);
+fPos = sum(accuracyMatrix(:) == 2);
+fNeg = sum(accuracyMatrix(:) == 3);
 
 switch measure
     case 'tp'
@@ -62,6 +61,8 @@ switch measure
         measureVal = (tPos + tNeg) / (tPos + fPos + fNeg + tNeg);
         
     case 'detections'
+        % Note that detections doesn't work when the ground truth is put
+        % end to end. It has to be an actual brain matrix.
         [labelled, nLabelled] = bwlabeln(groundTruth);
         labelled = labelled .* (-1 * detections);
         
