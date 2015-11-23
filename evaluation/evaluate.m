@@ -62,7 +62,7 @@ switch measure
         
     case 'detections'
         % Note that detections doesn't work when the ground truth is put
-        % end to end. It has to be an actual brain matrix.
+        % end to end. It has to be an actual 3d brain matrix.
         [labelled, nLabelled] = bwlabeln(groundTruth);
         labelled = labelled .* (-1 * detections);
         
