@@ -20,7 +20,7 @@ function [X,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt
         sliceNumber = sliceNumbers(index);
         Yt = Lesion(:,:,sliceNumber);
         f = filt(:,:,1);
-        disp('This is the Feature Extraction for a particular slice');
+        disp(['This is the Feature Extraction for a particular slice (', num2str(index), ')']);
 
         iter = sliceNumber;
             I_Flair = Flair(:,:,iter);
