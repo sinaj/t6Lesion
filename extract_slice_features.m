@@ -44,7 +44,7 @@ function [Xt,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumber,filt
             I_haar(:,:,7) = Hx;
             I_haar(:,:,8) = Hy;
             I_haar(:,:,9) = mag;
-            I_haar = padarray(I_haar,[7,7],'replicate','post');
+            I_haar = padarray(I_haar,[11,11],'replicate','post');
             
             % Compute LM Filter bank features
             for jter = 1:p
