@@ -15,7 +15,7 @@ function [X,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt
     n = size(Flair,3);
     p = size(filt,3);
     Xt=[];
-    X=[]
+    X=[];
     for index = 1:size(sliceNumbers,2)
         sliceNumber = sliceNumbers(index);
         Yt = Lesion(:,:,sliceNumber);
@@ -62,8 +62,6 @@ function [X,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt
 
                 end
             I_patient = I_patient(25:end-24,25:end-24,:);
-            size(I_haar)
-            size(I_patient)
             Xt = cat(3,I_T1,I_T2,I_Flair,I_haar,I_patient);
             
             Xt = reshape(Xt,[size(I_T1,1)*size(I_T1,2),size(Xt,3)]);

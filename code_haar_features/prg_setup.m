@@ -13,7 +13,7 @@
 
 %% Main function
 function prg_setup()
-clc,close all,clear all
+% clc,close all,clear all
 
 % message
 fun_messages('Program Setup','presentation');
@@ -49,6 +49,7 @@ end
 %% messages
 % This function prints a specific message on the command window
 function fun_messages(text,message)
+return;
 if (nargin~=2), error('incorrect input parameters'); end
 
 % types of messages
