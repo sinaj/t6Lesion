@@ -35,8 +35,8 @@ fun_messages('Haar-like Features','presentation');
 fun_messages('Haar-like Features','title');
 
 % parameters
-hs = 10;  % Haar filter size (integer and even)
-fs = 10;  % font size
+hs = 6;  % Haar filter size (integer and even)
+fs = 6;  % font size
 %imgPath = './images/window.jpg';  % image file path
 %imgPath = './images/kio_tower.jpg';  % image file path
 
