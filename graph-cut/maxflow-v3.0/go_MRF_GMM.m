@@ -1,8 +1,8 @@
-
-function [  ] = testLessionSegmentation3Dimage()
+clear;
+clc;
 % X should be n*m*f which f is the feature space
-addpath('D:/Courses/Machine Learning/Project/git/t6Lesion');
-addpath('D:/Courses/Machine Learning/Project/git/t6Lesion/evaluation');
+addpath('../..');
+addpath('../../evaluation');
 
 %% ================= Extract featrues from the data =======================
 
@@ -10,8 +10,7 @@ addpath('D:/Courses/Machine Learning/Project/git/t6Lesion/evaluation');
     disp('Loading data sets...');
     [X, Y] = get_trainData();
     disp('done.');
-
-%% ================= My Work Starts Here =======================
+%% ================= MRF Starts Here =======================
 sigma = 1;
 
 
@@ -44,6 +43,7 @@ size(linkWeights);
 T = sparse(pixels,clusters,linkWeights);
 
 
+
 disp('calculating maximum flow ...');
 
 [flow,labels] = maxflow(A,T);
@@ -65,5 +65,4 @@ fprintf('Specificity is %f \n',specificity);
 fprintf('Accuracy is %f \n',accuracy);
 fprintf('Detections is %f \n',detections);
 
-end
 

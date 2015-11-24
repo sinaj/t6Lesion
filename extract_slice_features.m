@@ -9,6 +9,7 @@
 % Output Y is just slices of MRI scan with Lesion data - 217 x 181 x 181
 
 function [X,Y] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumber)
+addpath('code_haar_features');
 
     filt=makeLMfilters;
     n = size(Flair,3);
@@ -29,7 +30,7 @@ function [X,Y] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumber)
         I_Flair = I_Flair./mean(I_Flair(I_Flair(:)>0));       
 
         I_patient=zeros([size(I_T1) p*3]);
-        I_haar=zeros([(size(I_T1)-7) 9]);               
+        I_haar=zeros([(size(I_T1)-11) 9]);               
         
             % Compute Haar-like Features
             [Hx,Hy,mag]=prg_haar_features(I_T1);
@@ -44,7 +45,7 @@ function [X,Y] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumber)
             I_haar(:,:,7) = Hx;
             I_haar(:,:,8) = Hy;
             I_haar(:,:,9) = mag;
-            I_haar = padarray(I_haar,[7,7],'replicate','post');
+            I_haar = padarray(I_haar,[11,11],'replicate','post');
             
             % Compute LM Filter bank features
             for jter = 1:p
