@@ -3,7 +3,7 @@ clc;
 addpath classification
 addpath evaluation
 
-load X40k.mat;
+load X40kv2.mat;
 Y = X(:, 157);
 X = X(:, 1:156);
 pos_ind = Y == 1;
