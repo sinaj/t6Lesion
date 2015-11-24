@@ -39,7 +39,7 @@ fun_messages('compiling mex_img2II.cc','information');
 mex mex_img2II.cc;
 fun_messages('compiling mex_haar_features.cc','information');
 mex mex_haar_features.cc;
-cd('../');
+cd('../../');
 
 % message
 fun_messages('end','title');

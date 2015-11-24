@@ -1,10 +1,13 @@
 clear;
 clc;
+[T1,T2,Flair,Lesion] = load_data('brainWeb');
 addpath classification
 addpath evaluation
-
-load X40k.mat;
+load X40kv2.mat;
 data = X;
+X_train = X(:,1:156);
+Y_train = X(:,157);
+filt = makeLMfilters;
 data = data(randperm(size(data, 1)), :);
 
 used_model = 'RF';
@@ -21,7 +24,12 @@ spc_vec = [];
 det_vec = [];
 
 for k = 1:folds
-    [X_train, Y_train, X_test, Y_test] = generateFold(pos_data, neg_data, k, folds);
+    %[X_train, Y_train, X_test, Y_test] = generateFold(pos_data, neg_data, k, folds);
+    [Xt,Yt] = extract_slice_features (T1, T2, Flair,Lesion,90,filt);
+    Xt=cat(3,Xt,Yt);
+    Xt = reshape(Xt,[size(T1,1)*size(T1,2),size(Xt,3)]);
+    X_test = Xt(:,1:156);
+    Y_test = Xt(:,157);
     fprintf('Training (fold = %d)... ', k);
     train_start_time = cputime;
     model = train(used_model, X_train, Y_train);

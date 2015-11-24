@@ -8,7 +8,7 @@ function [ patches , labels] = extract_patches( Y )
 
 % Initial Settings
 neg_pos_ratio = 2;
-max_samples_num = 1000;
+max_samples_num = 40000;
 
 train_data_size = min(max_samples_num, (neg_pos_ratio + 1) * sum(sum(sum(Y == 1))));
 
