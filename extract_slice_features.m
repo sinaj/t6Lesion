@@ -9,7 +9,9 @@
 % Output Y is just slices of MRI scan with Lesion data - 217 x 181 x 181
 
 function [Xt,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumber,filt)
-
+    if nargin < 6
+        filt = makeLMfilters;
+    end
     n = size(Flair,3);
     p = size(filt,3);
     Xt=[];
