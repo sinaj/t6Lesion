@@ -11,7 +11,7 @@ load X40kv2.mat;
 Y = X(:, 157);
 X = X(:, 1:156);
 dataset = 'brainWeb';
-test_slice_num = 1;
+test_slice_num = 10;
 
 % pos_ind = Y == 1;
 % neg_ind = Y == 0;
@@ -63,7 +63,9 @@ slice_labels = slice_labels(:, :, 1);
 slice_ys = reshape(Y_test, 217, 181, test_slice_num);
 slice_ys = cat(3, slice_ys(:, :, 1), zeros(size(slice_labels)));
 
+disp('Preparing visual result...');
 imshow(cat(3, slice_labels, slice_ys));
+disp('done.');
 
 
 
