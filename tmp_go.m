@@ -1,5 +1,5 @@
-clear;
-clc;
+% clear;
+% clc;
 addpath classification
 addpath evaluation
 addpath code_haar_features
@@ -7,46 +7,40 @@ addpath code_haar_features
 !synclient HorizEdgeScroll=0 HorizTwoFingerScroll=0
 warning off;
 
-load X40kv2.mat;
+load X40kv2;
+% load brain_web_entropy.mat;
+% load Patch40k.mat;
+% X = data(:, 1:size(data, 2)-1);
+% Y = data(:, end);
 Y = X(:, 157);
 X = X(:, 1:156);
 dataset = 'brainWeb';
+model_name = 'RF';
 test_slice_num = 1;
 
-% pos_ind = Y == 1;
-% neg_ind = Y == 0;
+% train_ind = sub2ind([217, 181, 181], subs(:, 1), subs(:, 2), subs(:, 3));
 % 
-% train_size = 24000;
-% 
-% pos_ind_train = [ones(train_size, 1); zeros(length(Y)-train_size, 1)] .* pos_ind;
-% pos_ind_test = [zeros(train_size, 1); ones(length(Y)-train_size, 1)] .* pos_ind;
-% 
-% neg_ind_train = [ones(train_size, 1); zeros(length(Y)-train_size, 1)] .* neg_ind;
-% neg_ind_test = [zeros(train_size, 1); ones(length(Y)-train_size, 1)] .* neg_ind;
-% 
-% ind_train = logical(pos_ind_train) | logical(neg_ind_train);
-% ind_test = logical(pos_ind_test) | logical(neg_ind_test);
-% 
-% X_train = X(ind_train, :);
-% Y_train = Y(ind_train);
-% 
-% X_test = X(ind_test, :);
-% Y_test = Y(ind_test);
-
+% X_train = X(train_ind, :);
+% Y_train = Y(train_ind);
 X_train = X;
 Y_train = Y;
 
+Y_train(isnan(Y_train)) = 0;
+
 disp('Training...');
 train_start_time = cputime;
-model = train('RF', X_train, Y_train);
+model = train(model_name, X_train, Y_train);
 fprintf('Time Elapsed Training: %f\n', cputime - train_start_time);
 disp('done.');
 
 [X_test, Y_test] = loadData(dataset, 91:(91+test_slice_num-1));
+% X_test = X(217*181*91+1:217*181*92, :);
+% Y_test = Y(217*181*91+1:217*181*92);
+
 
 disp('Testing...');
 test_start_time = cputime;
-labels = test('RF', model, X_test);
+labels = test(model_name, model, X_test);
 fprintf('Time Elapsed Testing: %f\n', cputime - test_start_time);
 disp('done.');
 
@@ -63,7 +57,9 @@ slice_labels = slice_labels(:, :, 1);
 slice_ys = reshape(Y_test, 217, 181, test_slice_num);
 slice_ys = cat(3, slice_ys(:, :, 1), zeros(size(slice_labels)));
 
+disp('Preparing visual result...');
 imshow(cat(3, slice_labels, slice_ys));
+disp('done.');
 
 
 

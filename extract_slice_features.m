@@ -8,7 +8,7 @@
 %           X(1:217,:,:), i.e., 217 x 181 x 4
 % Output Y is just slices of MRI scan with Lesion data - 217 x 181 x 181
 
-function [X,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt)
+function [X,Y] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt)
     if nargin < 6
         filt = makeLMfilters;
     end
@@ -16,11 +16,12 @@ function [X,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt
     p = size(filt,3);
     Xt=[];
     X=[];
+    Y=[];
     for index = 1:size(sliceNumbers,2)
         sliceNumber = sliceNumbers(index);
         Yt = Lesion(:,:,sliceNumber);
         f = filt(:,:,1);
-        disp('This is the Feature Extraction for a particular slice');
+        disp(['This is the Feature Extraction for a particular slice (', num2str(index), ')']);
 
         iter = sliceNumber;
             I_Flair = Flair(:,:,iter);
@@ -68,5 +69,6 @@ function [X,Yt] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt
             Yt = reshape(Yt,[size(I_T1,1)*size(I_T1,2),size(Yt,3)]);
       
             X = cat(1,X,Xt);
+            Y = cat(1,Y,Yt);
     end
 end
