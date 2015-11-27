@@ -49,7 +49,7 @@ addpath('../../NRRD Reader');
     disp('done.');
     
 %% ==================== Load numOfSlices Slices for Testing ==============
-    numOfSlices = 1;
+    numOfSlices = 3;
     offsetOfSlices = 80;
     numOfFeatures = 156;
     SliceWidth = 217;
@@ -80,14 +80,16 @@ addpath('../../NRRD Reader');
     
     end
     fprintf('Time Elapsed Loading Slices: %f\n', cputime - load_test_start_time);
+    
     disp('done.');
     
     
 %% ===================== MRF Starts Here ==================================
-sigma = 1;
+sigma = 0.01;
 
 X_test = permute(X_test,[1 2 4 3]);
 %size(X_test) = 217 181 numOfSlices 156
+
 
 [height,width,depth,featureNum] = size(X_test);
 disp('building graph ...');
@@ -100,7 +102,7 @@ E = edges4connected3Dimage(height,width,depth);
 V = nLinkWeight(X_test,E,sigma);
 size(E);
 size(V);
-A = sparse(E(:,1),E(:,2),V,N,N,4*N);
+A = sparse(E(:,1),E(:,2),V,N,N);
 
 
 % terminal weights
@@ -109,17 +111,16 @@ A = sparse(E(:,1),E(:,2),V,N,N,4*N);
 labelsSina = test('RF', model, X_test);
 
 [labelsCell,Scores] = predict(model,X_test);
+Scores = round(Scores);
 labelsRF = zeros(size(labelsCell, 1), 1);
 for i = 1:length(labelsRF)
     labelsRF(i) = double(labelsCell{i} == '1');
 end
 
-
-
 linkWeights = zeros(size(Scores,1),1);
 clusters = zeros(size(Scores,1),1);
 for i=1:size(Scores,1)   
-    if(Scores(i,1) > Scores(i,2))
+    if(labelsRF(i)==0)
         linkWeights(i,1)=Scores(i,1);
         clusters(i,1)=1;
     else
@@ -153,5 +154,12 @@ fprintf('Sensitivity is %f \n',sensitivity);
 fprintf('Specificity is %f \n',specificity);
 fprintf('Accuracy is %f \n',accuracy);
 fprintf('Detections is %f \n',detections);
+
+
+slice_labels = double(labels(:,:,1));
+slice_ys = double(Y(:,:,1));
+slice_ys = cat(3, slice_ys, zeros(size(slice_labels)));
+
+imshow(cat(3, slice_ys, slice_labels));
 
 

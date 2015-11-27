@@ -65,4 +65,10 @@ fprintf('Specificity is %f \n',specificity);
 fprintf('Accuracy is %f \n',accuracy);
 fprintf('Detections is %f \n',detections);
 
+slice_labels = double(labels(:,:,1));
+slice_ys = double(Y(:,:,1));
+slice_ys = cat(3, slice_ys, zeros(size(slice_labels)));
+
+imshow(cat(3, slice_ys, slice_labels));
+
 

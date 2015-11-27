@@ -13,10 +13,11 @@ function E = edges4connected3Dimage(height,width,depth)
 %   $Date$
 %
 
-N = height*width;
+N = height*width*depth;
 I = []; J = [];
 % connect vertically (down, then up)
-is = [1:N]'; is([height:height:N])=[];
+is = [1:N]';
+is([height:height:N])=[];
 js = is+1;
 I = [I;is;js];
 J = [J;js;is];
@@ -26,8 +27,8 @@ js = is+height;
 I = [I;is;js];
 J = [J;js;is];
 %connect in z dimention
-is = [1:N*depth-N]';
-js = js+N;
+is = [1:N-width*height]';
+js = is+width*height;
 I = [I;is;js];
 J = [J;js;is];
 
