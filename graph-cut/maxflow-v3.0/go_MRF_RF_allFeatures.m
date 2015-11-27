@@ -49,7 +49,7 @@ addpath('../../NRRD Reader');
     disp('done.');
     
 %% ==================== Load numOfSlices Slices for Testing ==============
-    numOfSlices = 3;
+    numOfSlices = 10;
     offsetOfSlices = 80;
     numOfFeatures = 156;
     SliceWidth = 217;
@@ -104,14 +104,13 @@ size(E);
 size(V);
 A = sparse(E(:,1),E(:,2),V,N,N);
 
-
 % terminal weights
 % connect source to leftmost column.
 % connect rightmost column to target.
 labelsSina = test('RF', model, X_test);
 
 [labelsCell,Scores] = predict(model,X_test);
-Scores = round(Scores);
+
 labelsRF = zeros(size(labelsCell, 1), 1);
 for i = 1:length(labelsRF)
     labelsRF(i) = double(labelsCell{i} == '1');
@@ -130,7 +129,7 @@ for i=1:size(Scores,1)
 end
 
 pixels = [1:height*width*depth]';
-
+linkWeights = max(Scores')';
 T = sparse(pixels,clusters,linkWeights);
 
 disp('calculating maximum flow ...');
