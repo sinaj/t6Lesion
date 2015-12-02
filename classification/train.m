@@ -6,6 +6,8 @@ elseif strcmp(classification_model, 'RF')
     model = learnRandomForest(X, Y);
 elseif strcmp(classification_model, 'logreg')
     model = learnLogisticReg(X, Y);
+elseif strcmp(classification_model, 'knn')
+    model = fitcknn(X,Y);
 else
     disp('INVALID MODEL ENTERED! (train.m)');
     model = [];
