@@ -12,6 +12,9 @@ elseif strcmp(classification_model, 'logreg')
     temp = mnrval(model, X_test);
     labels = round(temp(:, 2));
     
+elseif strcmp(classification_model, 'knn')
+    labels = predict(model,X_test);
+    
 else
     disp('INVALID MODEL ENTERED! (predict.m)');
 end
