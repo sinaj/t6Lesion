@@ -47,6 +47,7 @@ addpath('../../NRRD Reader');
 
     disp('RF Training...');
     train_start_time = cputime;
+
     model = train('RF', X, Y);
     
     fprintf('Time Elapsed Training RF: %f\n', cputime - train_start_time);
@@ -109,6 +110,7 @@ X_test = reshape(X_test,N,featureNum);
 E = edges4connected3Dimage(height,width,depth);
 %V = abs(m(E(:,1))-m(E(:,2)))+eps
 V = nLinkWeight(X_test,E,sigma);
+V = V - min(V);
 V = V / max(V);
 A = sparse(E(:,1),E(:,2),V,N,N);
 
@@ -155,11 +157,13 @@ disp('Evaluating Results ...');
 Y = round(Y_test);
 Y(isnan(Y)) = 0;
 %Y = reshape(Y,height*width*depth,1);
+RFDcs = evaluate(double(Y), double(reshape(labelsRF, size(Y))), 'dsc');
 [dcs] = evaluate(double(Y), double(labels), 'dsc');
 [sensitivity] = evaluate(double(Y), double(labels), 'sensitivity');
 [specificity] = evaluate(double(Y), double(labels), 'specificity');
 [accuracy] = evaluate(double(Y), double(labels), 'accuracy');
 [detections] = evaluate(double(Y), double(labels), 'detections');
+fprintf('Dice Similariity Coefficient is %f (RF)\n', RFDcs);
 fprintf('Dice Similarity Coefficient is %f \n',dcs);
 fprintf('Sensitivity is %f \n',sensitivity);
 fprintf('Specificity is %f \n',specificity);
