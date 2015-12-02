@@ -26,7 +26,9 @@ elseif strcmp(classification_model, 'NN')
             labels(i) = 1;
         end
     end
-    labels = labels';
+    labels = labels';    
+elseif strcmp(classification_model, 'knn')
+    labels = predict(model,X_test);
 else
     disp('INVALID MODEL ENTERED! (predict.m)');
 end
