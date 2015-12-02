@@ -1,5 +1,3 @@
-function flow = test2()
-
 % TEST2 Demonstrates gradient-based image
 %   min-cut partitioning.
 %
