@@ -28,27 +28,24 @@ function [X,Y] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt)
             I_T1 = T1(:,:,iter);
             I_T2 = T2(:,:,iter);
 
-            I_T1 = normalize(I_T1);
-            I_T2 = normalize(I_T2);
-            I_Flair = normalize(I_Flair);       
-
-            I_patient=zeros([(size(f)+size(I_T1)-1) p*3]);
-            I_haar=zeros([(size(I_T1)-7) 9]);               
+%             I_patient=zeros([(size(f)+size(I_T1)-1) p*3]);
+              I_patient = [];
+%             I_haar=zeros([(size(I_T1)-7) 9]);               
 
                 % Compute Haar-like Features
-                [Hx,Hy,mag]=prg_haar_features(I_T1);
-                I_haar(:,:,1) = Hx;
-                I_haar(:,:,2) = Hy;
-                I_haar(:,:,3) = mag;
-                [Hx,Hy,mag]=prg_haar_features(I_T2);
-                I_haar(:,:,4) = Hx;
-                I_haar(:,:,5) = Hy;
-                I_haar(:,:,6) = mag;
-                [Hx,Hy,mag]=prg_haar_features(I_Flair);
-                I_haar(:,:,7) = Hx;
-                I_haar(:,:,8) = Hy;
-                I_haar(:,:,9) = mag;
-                I_haar = padarray(I_haar,[7,7],'replicate','post');
+%                 [Hx,Hy,mag]=prg_haar_features(I_T1);
+%                 I_haar(:,:,1) = Hx;
+%                 I_haar(:,:,2) = Hy;
+%                 I_haar(:,:,3) = mag;
+%                 [Hx,Hy,mag]=prg_haar_features(I_T2);
+%                 I_haar(:,:,4) = Hx;
+%                 I_haar(:,:,5) = Hy;
+%                 I_haar(:,:,6) = mag;
+%                 [Hx,Hy,mag]=prg_haar_features(I_Flair);
+%                 I_haar(:,:,7) = Hx;
+%                 I_haar(:,:,8) = Hy;
+%                 I_haar(:,:,9) = mag;
+%                 I_haar = padarray(I_haar,[7,7],'replicate','post');
 
                 % Compute LM Filter bank features
                 for jter = 1:p
@@ -57,18 +54,21 @@ function [X,Y] = extract_slice_features (T1, T2, Flair,Lesion,sliceNumbers,filt)
                     cf = conv2(I_Flair,f);
                     c1 = conv2(I_T1,f);
                     c2 = conv2(I_T2,f);
-                    I_patient(:,:,jter) = cf;
-                    I_patient(:,:,jter + p) = c1;
-                    I_patient(:,:,jter + (2*p)) = c2;
+                    I_patient = cat(3, I_patient, cf, c1, c2);
+%                     I_patient(:,:,jter) = cf;
+%                     I_patient(:,:,jter + p) = c1;
+%                     I_patient(:,:,jter + (2*p)) = c2;
 
                 end
             I_patient = I_patient(25:end-24,25:end-24,:);
-            Xt = cat(3,I_T1,I_T2,I_Flair,I_haar,I_patient);
+            Xt = cat(3,I_T1,I_T2,I_Flair,I_patient);
             
-            Xt = reshape(Xt,[size(I_T1,1)*size(I_T1,2),size(Xt,3)]);
-            Yt = reshape(Yt,[size(I_T1,1)*size(I_T1,2),size(Yt,3)]);
+%             Xt = reshape(Xt,[size(I_T1,1)*size(I_T1,2),size(Xt,3)]);
+%             Yt = reshape(Yt,[size(I_T1,1)*size(I_T1,2),size(Yt,3)]);
       
             X = cat(1,X,Xt);
             Y = cat(1,Y,Yt);
+            
+            
     end
 end
