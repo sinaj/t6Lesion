@@ -1,0 +1,165 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips14submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+%\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+
+
+\title{Multiple Sclerosis Lesion Segmentation in MRI Images }
+
+\author{
+Gautham Vasan \\
+Department of Computing Science\\
+University of Alberta\\
+Edmonton, T6E2H2 \\
+\texttt{vasan@ualberta.ca} \\
+\And
+Jared Rewerts \\
+Department of Computer Engineering \\
+University of Alberta \\Edmonton, T6E2H2 \\
+\texttt{rewerts@ualberta.ca} \\
+\And
+Megha Panda \\
+Department of Computing Science\\
+University of Alberta \\Edmonton, T6E2H2 \\
+\texttt{meghaanu@ualberta.ca} \\
+\texttt{email} \\
+\And
+Parisa Mohebbi \\
+Department of Computing Science \\
+University of Alberta \\Edmonton, T6E2H2 \\
+\texttt{mohebbi@ualberta.ca} \\
+\And
+Reza Sobhannejad \\
+Department of Computing Science \\
+University of Alberta \\Edmonton, T6E2H2 \\
+\texttt{sobhanne@ualberta.ca} \\
+\And
+Sina Jalali  \\
+Department of Computing Science \\
+University of Alberta \\Edmonton, T6E2H2 \\
+\texttt{jalali1@ualberta.ca} \\
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\nipsfinalcopy % Uncomment for camera-ready version
+
+\begin{document}
+
+
+\maketitle
+% Abstract
+\begin{abstract}
+The abstract paragraph should be indented 1/2~inch (3~picas) on both left and
+right-hand margins. Use 10~point type, with a vertical spacing of 11~points.
+The word \textbf{Abstract} must be centered, bold, and in point size 12. Two
+line spaces precede the abstract. The abstract must be limited to one
+paragraph.
+\end{abstract}
+
+%---------------------------------------- Introduction-------------------------------------------%
+\section{Introduction}
+What is MS? Why it is an interesting problem? Problem definition and motivation. What are the challenges?
+
+\subsection{Related Work}
+Segmentation of Lesions in MRI images is an active area of research. The 3 main objectives 1) Extracting features that can differentiate healthy tissues from scar tissues. 2) Selecting the most relevant features that help achieve the task 3) Improving the performance of the classification.
+
+\subsubsection{Review of Segmentation Methods}
+Here we talk about what methods have been used so far. The features and the classifier used should be discussed. Basically a literature survey. We could just use Review paper that Dana sent us earlier. 
+
+\subsubsection{ Exploring Combinations }
+What is it that we intend to do, i.e., compare performance of different classifiers and features.
+
+%------------------------------------------- Features ----------------------------------------------%
+\section{Feature Detection}
+What is feature extraction? Why is it important? Reasons for using the particular features
+
+\subsection{Context (Haar-Like Features)}
+
+\subsection{Image Filters}
+
+\subsubsection{Leung-Malik(LM) Filter Bank}
+
+\subsection{Entropy \& Gaussian based Features)}
+
+\subsection{Atlas Features}
+
+All the features need to explained briefly with good images.
+
+%------------------------------------------------ Classifiers ------------------------------------------%
+\section{Classifiers}
+
+Reasons for using each classification method. Brief description about them. No need for images here I guess.  
+
+\subsection{Support Vector Machines}
+
+\subsection{Neural Networks}
+
+\subsection{k-Nearest Neighbours}
+
+\subsection{Random Forests}
+
+\subsection{Markov Random Fields}
+
+\subsection{Logistic Regression}
+
+%-----------------------------------Experiment Design -------------------------------------------------------%
+\section{Experiment Design}
+Pipeline Diagram is required here
+
+\subsection{Validation Measures}
+False Positive, false negative, etc. Why Dice is preferred?
+\subsubsection{Dice Score}
+\subsubsection{Accuracy}
+\subsubsection{Sensitivity}
+\subsubsection{Detections}
+
+\subsection{Training and Test Data}
+BrainWeb and Miccai Challenge Data. Explain how sampling is done on data to train the classifier. 
+
+% --------------------------------------- Results ----------------------------------------------------%
+\section{Results}
+Lots of Images! Table with comparative results. Explanation for why we get these results. 
+
+\subsection{State of the art results}
+Brief description of the benchmark
+
+\subsection{Discussion}
+Detailed analysis of the results we get from different results
+
+%-------------------------------------- Conclusion ------------------------------------------%
+\section{Conclusion}
+
+% ---------------------------------------- Acknowledgements ----------------------------------%
+\section{Acknowledgements}
+
+%------------------------------------------- References ----------------------------------------%
+\section{References}
+
+\small{
+[1] Alexander, J.A. \& Mozer, M.C. (1995) Template-based algorithms
+for connectionist rule extraction. In G. Tesauro, D. S. Touretzky
+and T.K. Leen (eds.), {\it Advances in Neural Information Processing
+Systems 7}, pp. 609-616. Cambridge, MA: MIT Press.
+
+[2] Bower, J.M. \& Beeman, D. (1995) {\it The Book of GENESIS: Exploring
+Realistic Neural Models with the GEneral NEural SImulation System.}
+New York: TELOS/Springer-Verlag.
+
+[3] Hasselmo, M.E., Schnell, E. \& Barkai, E. (1995) Dynamics of learning
+and recall at excitatory recurrent synapses and cholinergic modulation
+in rat hippocampal region CA3. {\it Journal of Neuroscience}
+{\bf 15}(7):5249-5262.
+}
+
+\end{document}
