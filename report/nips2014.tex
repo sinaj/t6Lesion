@@ -81,18 +81,18 @@ paragraph.
 What is MS? Why it is an interesting problem? Problem definition and motivation. What are the challenges?
 
 \subsection{Related Work}
-Segmentation of Lesions in MRI images is an active area of research. The 3 main objectives 1) Extracting features that can differentiate healthy tissues from scar tissues. 2) Selecting the most relevant features that help achieve the task 3) Improving the performance of the classification.
+Segmentation of Lesions in MRI images is an active area of research. The 3 main objectives are: 1) Extracting features that can differentiate healthy tissues from scar tissues, 2) Selecting the most relevant features that help achieve the task, and 3) Improving the performance of the classification.
 
 \subsubsection{Review of Segmentation Methods}
-Here we talk about what methods have been used so far. The features and the classifier used should be discussed. Basically a literature survey. We could just use Review paper that Dana sent us earlier. 
+In MS lesion segmentation, classical features are the intensity of each voxel in different modality images. Additionaly, some methods like  \cite{commowick2009continuous}, combined K-NN based on intensities with a template-driven segmentation method to reduce false positive. Others like the method presented in \cite{zijdenbos2002automatic} used the probability of a voxel belonging to tissue class with help of an atlas. Moreover, as another feature, intensity of the six neighbor voxels can be added to feature vector of a point which has been used with an ANN in \cite{younis2007ms}. In \cite{kroon2008multiple}, they used up to 255 features derived from applying different filters on images, and then with the help of principal component analysis (PCA), data is transformed to a new orthogonal coordinates so the first column covers the greatest variance between data; hence, a simple thresholding on the first component of PCA can classify lesions. In \cite{geremia2011spatial}, random decision forest (RDF) is used with local (like intensity) and context-rich (will be discussed later) features. RDF has the advantage of automatically using best features over other methods.
 
-\subsubsection{ Exploring Combinations }
-What is it that we intend to do, i.e., compare performance of different classifiers and features.
+\subsubsection{ Exploring Combinations [PLEASE GIVE YOUR COMMENTS ON THIS PART] }
+Lots of methods has been employed for lesion segmentation as mentioned before; but, no valid comparision is done to measure performance of different classifiers using different features. In this project we try to compare various algorithms' efficiencies on the same dataset and same set of features to explore their properties in the task of lesion segmentation. We use Support Vector Machine (SVM), Neural Networks, K-Neares Neighbors, Random Forest, Markov Random Field, and Logistic Regression as classifier; and Haar-Like, image filters, LM filters, entropy, gaussian based, and atlas as our features. In a broad sense, we tried to extract all possible features to see how the well-known classifiers operate based on them.
 
 %------------------------------------------- Features ----------------------------------------------%
 \section{Feature Detection}
 %What is feature extraction? Why is it important? Reasons for using the particular features
-Image analysis aims at reducing information to a subset that is relevant to the task in hand. Information reduction often happens gradually with information being reduced until the desired result is extracted from the data. \cite{Toennies} The first level of reduction computes local features that
+Image analysis aims at reducing information to a subset that is relevant to the task in hand. Information reduction often happens gradually with information being reduced until the desired result is extracted from the data. \cite{toennies2012guide} The first level of reduction computes local features that
 are assumed to pertain to objects of interest. 
 \subsection{Context (Haar-Like Features)}
 
@@ -120,6 +120,8 @@ Reasons for using each classification method. Brief description about them. No n
 \subsection{Random Forests}
 
 \subsection{Markov Random Fields}
+The basic principal of markov random field is treating the input image as a graph in which each voxel is a node and neighboring voxels are connected. In the case of foreground segmentation, two spacial nodes of foreground and background are added to the graph and edges between voxels and each of these two nodes have a weight equal to the probability of that voxel belongs to eighther foreground or background. Aim of the algorithm is using a graph-cut to divide graph into two classes subject to the combination of cutted edges is minimum.The advantage of this method is considering neighbors probabilities as a feature.
+In this project, we trained a random forest (which claimed to be the best algorithm for lesion segmentation) and used it to obtain initial probabilities of each voxel belonging to lesion. Then, MRF is applied based on the constructed graph.
 
 \subsection{Logistic Regression}
 
