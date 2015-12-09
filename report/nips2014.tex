@@ -3,6 +3,15 @@
 \usepackage{hyperref}
 \usepackage{url}
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+\usepackage{graphicx}              % to include figures
+\usepackage{epstopdf}
+\usepackage{amsmath}               % great math stuff
+\usepackage{amsfonts}              % for blackboard bold, etc
+\usepackage{amsthm}                % better theorem environments
+
+\usepackage{notoccite}
+\usepackage[numbers,sort&compress]{natbib}
+
 
 
 \title{Multiple Sclerosis Lesion Segmentation in MRI Images }
@@ -82,8 +91,9 @@ What is it that we intend to do, i.e., compare performance of different classifi
 
 %------------------------------------------- Features ----------------------------------------------%
 \section{Feature Detection}
-What is feature extraction? Why is it important? Reasons for using the particular features
-
+%What is feature extraction? Why is it important? Reasons for using the particular features
+Image analysis aims at reducing information to a subset that is relevant to the task in hand. Information reduction often happens gradually with information being reduced until the desired result is extracted from the data. \cite{Toennies} The first level of reduction computes local features that
+are assumed to pertain to objects of interest. 
 \subsection{Context (Haar-Like Features)}
 
 \subsection{Image Filters}
@@ -146,20 +156,7 @@ Detailed analysis of the results we get from different results
 %------------------------------------------- References ----------------------------------------%
 \section{References}
 
-\small{
-[1] Alexander, J.A. \& Mozer, M.C. (1995) Template-based algorithms
-for connectionist rule extraction. In G. Tesauro, D. S. Touretzky
-and T.K. Leen (eds.), {\it Advances in Neural Information Processing
-Systems 7}, pp. 609-616. Cambridge, MA: MIT Press.
-
-[2] Bower, J.M. \& Beeman, D. (1995) {\it The Book of GENESIS: Exploring
-Realistic Neural Models with the GEneral NEural SImulation System.}
-New York: TELOS/Springer-Verlag.
-
-[3] Hasselmo, M.E., Schnell, E. \& Barkai, E. (1995) Dynamics of learning
-and recall at excitatory recurrent synapses and cholinergic modulation
-in rat hippocampal region CA3. {\it Journal of Neuroscience}
-{\bf 15}(7):5249-5262.
-}
+\bibliography{bibliography}
+\bibliographystyle{plain}
 
 \end{document}

@@ -1,0 +1,16 @@
+\begin{thebibliography}{10}
+
+\bibitem{Toennies}
+Klaus D. Toennies
+\newblock {\em Guide to Medical Image Analysis}, 
+\newblock Springer Verlag London, 2012.
+
+\bibitem{mikolov2011empirical}
+Tomas Mikolov, Anoop Deoras, Stefan Kombrink, Lukas Burget, and Jan
+  Cernock{\`y}.
+\newblock Empirical evaluation and combination of advanced language modeling
+  techniques.
+\newblock In {\em INTERSPEECH}, pages 605--608, 2011.
+
+
+\end{thebibliography}
