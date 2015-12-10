@@ -3,7 +3,7 @@
 \usepackage{hyperref}
 \usepackage{url}
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
-\usepackage{graphicx}              % to include figures
+\usepackage{graphicx,subcaption}              % to include figures
 \usepackage{epstopdf}
 \usepackage{amsmath}               % great math stuff
 \usepackage{amsfonts}              % for blackboard bold, etc
@@ -11,9 +11,7 @@
 
 \usepackage{notoccite}
 \usepackage[numbers,sort&compress]{natbib}
-
-
-
+\usepackage{array}
 \title{Multiple Sclerosis Lesion Segmentation in MRI Images }
 
 \author{
@@ -74,13 +72,15 @@ Medical Imaging is an emerging field that can help workload for medical professi
 
 %---------------------------------------- Introduction-------------------------------------------%
 \section{Introduction}
-Multiple Sclerosis is a debilitating disease that affects the brain and spinal cord. Technically, MS is an autoimmune disease; the immune system attacks parts of the body, in this case, the protective covering of nerve fibers. If occurrences are bad enough, the nerves can build up scar tissue, which impedes nerve conduction. This scar tissue is what we refer to as lesions. 
+%What is MS? Why it is an interesting problem? Problem definition and motivation. What are the challenges?
+Multiple Sclerosis is a debilitating disease that affects the brain and spinal cord. Technically, MS is an autoimmune disease; the immune system attacks parts of the body, in this case, the protective covering of nerve fibers. If occurrences are bad enough, the nerves can build up scar tissue, which impedes nerve conduction. This scar tissue is what we refer to as lesions.
 
 One of the most shocking aspects of Multiple Sclerosis is that it primarily affects individuals between the ages of 15 and 40. Women are also twice as likely to be affected by MS. Early detection is key to managing symptoms and controlling disease outcomes. Affected individuals can use exercise, cool temperatures and a balanced diet to help treat symptoms.
 
 To detect Multiple Sclerosis lesions, scans are made of patient brains. Medical professionals analyze these scans, looking for signs of MS. These manual segmentation techniques have several drawbacks, not least among them the time input required by the medical professionals. Manual segmentation also has a high rate of error; only 70\% of lesions are properly detected [CITATION NEEDED]. Automatic segmentation techniques hope to improve these. 
 
 One of the main challenges of automatic segmentation is the low lesion volume in patient brain matter. Typically, only a small percentage of the patients brain has lesions, which can make detecting them difficult. This also poses a problem when gathering positive examples of the lesion. The positive to negative ratio is much lower than in many other segmentation problem spaces. Further, since most patients have very little lesion tissue, over classification can be a problem with automated segmentation. If a healthy brain is scanned and processed, ideally, we would show no lesions. In practice, this is can be very difficult.
+
 
 \subsection{Related Work}
 Segmentation of Lesions in MRI images is an active area of research. The 3 main objectives are: 
@@ -102,10 +102,40 @@ Lots of methods have been employed for lesion segmentation as mentioned before b
 Image analysis aims at reducing information to a subset that is relevant to the task in hand. Information reduction often happens gradually with information being reduced until the desired result is extracted from the data. \cite{toennies2012guide} The first level of reduction computes local features that
 are assumed to pertain to objects of interest. 
 \subsection{Context (Haar-Like Features)}
+In the detection phase of the Viola-Jones object detection framework \cite{Viola-Jones}, a window of the target size is moved over the input image, and for each subsection of the image the Haar-like feature is calculated. This difference is then compared to a learned threshold that separates non-objects from objects. Because such a Haar-like feature is only a weak learner or classifier (its detection quality is slightly better than random guessing) a large number of Haar-like features are necessary to describe an object with sufficient accuracy. 
+
+\begin{figure}[h]
+
+\centering
+\begin{subfigure}[b]{.4\linewidth}
+\centering
+\includegraphics[scale=0.4]{haar}
+\caption{ A. Calculation of Haar-like feature}
+%\label{fig:subim1}
+\end{subfigure}
+
+\begin{subfigure}[b]{.4\linewidth}
+\centering
+\includegraphics[scale=0.4]{HaarFeatures}
+\caption{ B. Different types of Haar-like Features}
+%\label{fig:subim2}
+\end{subfigure}
+
+\caption{Haar-Like Features}
+\end{figure}
 
 \subsection{Image Filters}
+Filtering is a technique used for modifying or enhancing an image. It can be used to emphasize certain features or remove other features in an image. In image processing filters are mainly used to suppress either the high frequencies in the image, i.e. smoothing the image, or the low frequencies, i.e. enhancing or detecting edges in the image. We extract the features through Linear filtering of the MRI image using convolution. 
 
-\subsubsection{Leung-Malik(LM) Filter Bank}
+\subsubsection{Leung-Malik (LM) Filter Bank}
+We use the filter bank provided by the Visual Geometry Group at the University of Oxford [] to obtain a set of features. The LM set is a multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. The filters occur at the basic scales $\sigma$ = {$\sqrt{2}$,2,2$\sqrt{2}$,4}. The Gaussians occur at the four basic scales while the 8 LOG filters occur at $\sigma$ and 3$\sigma$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{lmfilters}
+\caption{The LM filter bank has a mix of edge, bar and spot filters at multiple scales and orientations. It has a total of 48 filters}
+\label{fig:LM filters}
+\end{figure}
 
 \subsection{Entropy \& Gaussian based Features)}
 
@@ -127,7 +157,7 @@ Reasons for using each classification method. Brief description about them. No n
 \subsection{Random Forests}
 
 \subsection{Markov Random Fields}
-The basic principal of markov random field is treating the input image as a graph in which each voxel is a node and neighboring voxels are connected. In the case of foreground segmentation, two spacial nodes of foreground and background are added to the graph and edges between voxels and each of these two nodes have a weight equal to the probability of that voxel belongs to eighther foreground or background. Aim of the algorithm is using a graph-cut to divide graph into two classes subject to the combination of cutted edges is minimum.The advantage of this method is considering neighbors probabilities as a feature.
+The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the condition that combination of cutted edges is minimum. The advantage of this method is considering neighbors probabilities as a feature.
 In this project, we trained a random forest (which claimed to be the best algorithm for lesion segmentation) and used it to obtain initial probabilities of each voxel belonging to lesion. Then, MRF is applied based on the constructed graph.
 
 \subsection{Logistic Regression}
@@ -149,6 +179,27 @@ BrainWeb and Miccai Challenge Data. Explain how sampling is done on data to trai
 % --------------------------------------- Results ----------------------------------------------------%
 \section{Results}
 Lots of Images! Table with comparative results. Explanation for why we get these results. 
+
+\begin{center}
+\centering
+\begin{tabular}{ | m{7em} | m{2cm}| m{2cm} | m{2cm} | m{2cm} | } 
+\hline
+\textbf{Classifier} & \textbf{Dice Score} & \textbf{Accuracy} & \textbf{Sensitivity} & \textbf{Detection}\\ 
+\hline
+SVM & 0 & 0 & 0 & 0  \\ 
+\hline
+Neural Networks & 0 & 0 & 0 & 0 \\ 
+\hline
+k-Nearest Neighbours & 0 & 0 & 0 & 0 \\ 
+\hline
+Random Forest & 0 & 0 & 0 & 0 \\ 
+\hline
+MRF with RF & 0 & 0 & 0 & 0 \\ 
+\hline
+Logistic Regression & 0 & 0 & 0 & 0 \\ 
+\hline
+\end{tabular}
+\end{center}
 
 \subsection{State of the art results}
 Brief description of the benchmark
