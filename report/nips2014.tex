@@ -125,7 +125,7 @@ In the detection phase of the Viola-Jones object detection framework \cite{Viola
 Filtering is a technique used for modifying or enhancing an image. It can be used to emphasize certain features or remove other features in an image. In image processing filters are mainly used to suppress either the high frequencies in the image, i.e. smoothing the image, or the low frequencies, i.e. enhancing or detecting edges in the image. We extract the features through Linear filtering of the MRI image using convolution. 
 
 \subsubsection{Leung-Malik (LM) Filter Bank}
-We use the filter bank provided by the Visual Geometry Group at the University of Oxford [] to obtain a set of features. The LM set is a multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. The filters occur at the basic scales $\sigma$ = {$\sqrt{2}$,2,2$\sqrt{2}$,4}. The Gaussians occur at the four basic scales while the 8 LOG filters occur at $\sigma$ and 3$\sigma$. The algorithm proposed by Leung and Malik \cite{lmfilters} demonstrated excellent
+We use the filter bank provided by the Visual Geometry Group at the University of Oxford [] to obtain a set of features. The LM set is a multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. The filters occur at the basic scales $\sigma$ = {$\sqrt{2}$,2,2$\sqrt{2}$,4}. The Gaussians occur at the four basic scales while the 8 LOG filters occur at $\sigma$ and 3$\sigma$. The algorithm proposed by Leung and Malik \cite{LMfilters} demonstrated excellent
 results for recognizing 3D textures from a single image under any lighting and viewing geometry. Since different MRI scanners produce different quality of images, the LM filters should be able to recognize different textures, i.e., lesions in the brain.
 \begin{figure}[h]
 \centering
@@ -142,20 +142,20 @@ All the features need to explained briefly with good images.
 
 %------------------------------------------------ Classifiers ------------------------------------------%
 \section{Classifiers}
+%Reasons for using each classification method. Brief description about them. No need for images here I guess.
 
-Reasons for using each classification method. Brief description about them. No need for images here I guess.  
-
-\subsection{Support Vector Machines} 
-SVMs try to split the positive and negative data using a hyper-plain which applies very well on complex tasks when implemented with kernels. The model is both power-ful and unlikely to over-fit, but it is sensitive to ratio of positive and negative data (pos/neg) as it weights them equally. In our case, we need a model to learn lots of negative data, healthy brain patches, and a few positive data; hence, we should sample training data not unbalanced than ratio of 2 to 1.
+The general characteristics of each classifier used and the reasons for choosing them for the given task is given below. 
+\subsection{Support Vector Machines (SVM)} 
+SVMs try to split the positive and negative data using a hyper-plane which works very well on complex tasks when implemented with kernels. The model is both powerful and unlikely to over-fit. But it is sensitive to the ratio of positive and negative data (pos/neg) as it weights them equally. In our case, we need a model to learn lots of negative data, healthy brain patches, and a few positive data samples. Hence, we sample the training data such that it is not unbalanced, i.e., never more than a ratio of 2 to 1.
 
 \subsection{ Neural Networks} 
-The most important property of neural networks is the ability to identify a good estimation even for complex functions. Basically in Neural Networks we have a few layers. The first layer is our features (input) and the last layers is related to the labels (output). We also have a few hidden layers between these two. Considering this structure we can make almost all functions, even the most complex ones. That’s the reason for choosing this method. In this project we tried Neural Networks with 2 and three hidden layers.
+The most important property of neural networks is the ability to identify a good estimation even for complex functions. Basically in Neural Networks we have a few layers. The first layer is our features (input) and the last layers is related to the labels (output). We also have a few hidden layers between these two. Considering this structure we can make almost all functions, even the most complex ones. That’s the reason for choosing this method. In this project we tried Neural Networks with 2 to 3 hidden layers.
 
 \subsection{k-Nearest Neighbours} 
-Nearest Neighbours approach decides on the label of a certain data-point by counting votes of its k closest points. The model is completely dependent on the distance measure used to find close points. It is an easy to implement model and does not require training. To make a decision on each voxel we take the majority of votes from nearest points in the dataset. 
+Nearest Neighbours approach decides on the label of a certain data-point by counting votes of its k closest points. The model is completely dependent on the distance measure used to find close points. It is easy to implement this model and does not require training. To make a decision on each voxel we take the majority of votes from nearest points in the dataset. 
 
-\subsection{Random Forests} 
-The model is based on taking votes of a set of decision trees on each voxel. One of the best properties of RFs is that they are less sensitive of imbalanced ratio of positive and negative data compared to other models. Also, it provides the best features which split the classes better and scores the features based on how helpful they are in classification. Furthermore, it is hard for RFs to overfit while they fit complex models as a result of using different trees to make the overall decision. We learn the random forest and create the trees by distributing points in their leafs and predict by merging votes of each tree to label the data.
+\subsection{Random Forests (RF)} 
+The model is based on taking into account the votes of a set of decision trees on each voxel. One of the best properties of RFs is that they are less sensitive to imbalanced ratio of positive and negative data compared to other models. Also, it provides the best features which split the classes better and scores the features based on how helpful they are in classification. Furthermore, it is hard for RFs to overfit while they fit complex models as a result of using different trees to make the overall decision. We learn the random forest and create the trees by distributing points in their leafs and predict by merging votes of each tree to label the data.
 
 \subsection{Markov Random Fields}
 The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. In graph theory, a cut is a partition of the vertices of a graph into two disjoint subsets. An st-cut is a graph cut comprising all directed edges from a node in a vertex set A to a node in its complement, $\overline{A}$, such that s $\epsilon$ A, t $\epsilon$ $\overline{A}$, and A is connected. The cost of a cut is simply defined as the sum of edge weights for the edges removed by the cut. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the Min-Cut problem, i.e, to find the st-cut with minimal cost. The advantage of this method is that it considers the probabilities of its neighbours as a feature.
@@ -163,12 +163,12 @@ The basic principle of Markov Random Field is to treat the input image as a grap
 In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey \cite{garcia2013review}) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier.
 
 \subsection{Logistic Regression} 
-The model fits a line to separate the classes of data. It is easily implemented and if it has sufficient features, is capable of doing well in our problem space. We learn the hyper-plane through our train data and classify test data based on the direction of the hyper-plain they fall into. A particular area of interest is how MRF improves logistic regression when used in sequence.
+The model fits a line to separate the classes of data. It is easily implemented and if it has sufficient features, is capable of doing well in our problem space. We learn the hyper-plane through our train data and classify test data based on the direction of the hyper-plain they fall into. A particular area of interest is how MRF improves logistic regression when used in sequence. Logistic Regression would also act as a simple measure of the effectiveness of the features used. The idea is that if logistic regression is able to perform nearly as well as Random Forest, the features are working well irrespective of the classifier used.  
 
 
 %-----------------------------------Experiment Design -------------------------------------------------------%
 \section{Experiment Design}
-Pipeline Diagram is required here
+%Pipeline Diagram is required here
 
 \subsection{Validation Measures}
 For each pixel of the brain, our classifiers must label it as either lesion or healthy brain matter. Depending on the data set used, our ground truth source may be different. The MICCAI data set is provided by doctors and has also been cross referenced several times. The hope is that this increases the accuracy of the results. The MICCAI scan represent real brains. Brain Web on the other hand uses a simulated brain scan and places lesions in the simulated scans.
