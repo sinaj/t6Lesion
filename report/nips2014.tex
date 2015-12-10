@@ -260,8 +260,8 @@ Logistic Regression & 0 & 0 & 0 & 0 \\
 \end{center}
 
 \subsection{State of the art results}
-Brief description of the benchmark
-
+The best results for segmenting MS lesions reported until now comes from random forest algorithm explained in \cite{geremia2011spatial}. Their proposed method contains of 30 separated decision trees with maximum depth of 20; each tree has a lower bound for information gain which stops it from further growing. They used two types of features, local features which are intensities and context-rich features which combine intensity of a single voxel with distant regions. This method is tested on MICCAI grand challenge 2008 and they got a dice score of $39.39 \pm 18.4$. This result comes from doing a 3-fold cross-validation, meaning model is trained on two different brains and tested on the third one and the procedure repeats for three times.\\
+The important thing they revealed about MS lesion segmentation task is its need of having as more comprehensive training set as possible. They demonstrated that classifier with their selected features cannot detect lesions in locations which are not represented in training data.
 \subsection{Discussion}
 Detailed analysis of the results we get from different results
 
