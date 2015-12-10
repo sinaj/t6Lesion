@@ -110,14 +110,13 @@ In the detection phase of the Viola-Jones object detection framework \cite{Viola
 \begin{subfigure}[b]{.4\linewidth}
 \centering
 \includegraphics[scale=0.4]{haar}
-\caption{ A. Calculation of Haar-like feature}
+\caption{ Calculation of Haar-like feature}
 %\label{fig:subim1}
 \end{subfigure}
-
 \begin{subfigure}[b]{.4\linewidth}
 \centering
 \includegraphics[scale=0.4]{HaarFeatures}
-\caption{ B. Different types of Haar-like Features}
+\caption{Different types of Haar-like Features}
 %\label{fig:subim2}
 \end{subfigure}
 
@@ -158,8 +157,11 @@ Reasons for using each classification method. Brief description about them. No n
 reason for using random forest instead of a single decision tree: decision trees are known to suffer from overfitting, so it is better to have a forest and ensemble many decision tree. based on \cite{geremia2011spatial}
 
 \subsection{Markov Random Fields}
-The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighbouring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the condition that combination of cutted edges weights is minimum. The advantage of this method is considering neighbours probabilities as a feature.
-In this project, we trained a random forest (which claimed to be the best algorithm for lesion segmentation) and used it to obtain initial probabilities of each voxel belonging to lesion. Then, MRF is applied based on the constructed graph.
+
+The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. In graph theory, a cut is a partition of the vertices of a graph into two disjoint subsets. An st-cut is a graph cut comprising all directed edges from a node in a vertex set A to a node in its complement, $\overline{A}$, such that s $\epsilon$ A, t $\epsilon$ $\overline{A}$, and A is connected. The cost of a cut is simply defined as the sum of edge weights for the edges removed by the cut. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the Min-Cut problem, i.e, to find the st-cut with minimal cost. The advantage of this method is that it considers the probabilities of its neighbours as a feature.
+
+In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey []) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier..
+
 
 \subsection{Logistic Regression}
 
@@ -168,14 +170,68 @@ In this project, we trained a random forest (which claimed to be the best algori
 Pipeline Diagram is required here
 
 \subsection{Validation Measures}
-False Positive, false negative, etc. Why Dice is preferred?
+For each pixel of the brain, our classifiers must label it as either lesion or healthy brain matter. Depending on the data set used, our ground truth source may be different. The MICCAI data set is provided by doctors and has also been cross referenced several times. The hope is that this increases the accuracy of the results. The MICCAI scan represent real brains. Brain Web on the other hand uses a simulated brain scan and places lesions in the simulated scans.
+
+When comparing our output to the ground truth, we come up with 4 possibilities for each region of the brain scan:
+\begin{enumerate}
+  \item True Positive \newline
+		The ground truth and our detection agrees the region is a lesion.
+  \item True Negative \newline
+  		The ground truth and our detection agrees the region is healthy.
+  \item False Positive \newline
+  		Our detection finds a lesion in a brain region, but the ground truth disagrees.
+  \item False Negative \newline
+  		The ground truth finds healthy brain, but our detection disagrees.
+\end{enumerate} 
+Taken together, these values can be used to analyze the performance of different classifiers. 
 \subsubsection{Dice Score}
+Dice is the primary metric we used to analyze algorithm performance. 
+
+$$\frac{2*True Positive}{False Positive + False Negative + 2*True Positive}$$
+
+One of the major benefits of Dice is that it heavily weights true positives. This makes it a very strict measure for a problem space like ours, where the amount of positive tissue is very low. 
+
+As an example, consider scanning a brain that has a single tiny lesion. To get a perfect dice score, you must classify that lesion and only that lesion. Failing to classify that lesion will result in a score of 0. If you successfully classify the lesion, but also falsely classify surrounding tissue, the dice score will decrease rapidly. Since the healthy tissue heavily outweighs the lesions, it is easy to falsely classify a small amount of this healthy tissue as lesion.
+
+There is one caveat to keep in mind when using Dice however. If we test against a healthy brain scan, Dice cannot be used to analyze our results. This is because there is no possibility of getting a true positive and so the result will always be 0.
+
 \subsubsection{Accuracy}
+Accuracy is good measure of how much brain matter we properly classify. Unlike Dice, accuracy weights true negatives evenly with true positives.
+
+$$\frac{True Positive + True Negative}{False Positive + False Negative + True Positive + True Negative}$$
+
+For our problem, accuracy usually isn't very useful. The reason for this is that true negatives are too common to be considered a reliable metric. For most brain scans, you could just classify the brain as healthy and the resulting accuracy would be good. We still use it though, as it can be useful when scanning healthy brains, which is where Dice fails.
+
 \subsubsection{Sensitivity}
+
+Sensitivity is similar to Dice in that it heavily weights true positives.
+
+$$\frac{True Positive}{False Negative + True Positive}$$
+
+Sensitivity affords no penalty to misclassifying healthy brain as lesion. This means a brain scan that is output as entirely lesion will do well on it. Despite this drawback, it can still be useful in situations that Dice is in.
+
 \subsubsection{Detections}
 
+As a simple evaluation measure, we count the number of properly classified lesions. A lesion is considered classified if we find even a single pixel of lesion within it. This makes it unreliable in terms of overall performance, but it is a valuable metric for basic testing of classifiers.
+
 \subsection{Training and Test Data}
-BrainWeb and Miccai Challenge Data. Explain how sampling is done on data to train the classifier. 
+%BrainWeb and Miccai Challenge Data. Explain how sampling is done on data to train the classifier.
+The quantitative analysis of the MRI images is done using data provided by two sources:
+\begin{enumerate}
+\item Brain Web - MS Lesion Brain Database, McGill University
+\item MICCAI Challenge 2008 Dataset
+\end{enumerate}
+
+There exists no common ground truth or gold standard in most medical analysis tasks which results in an increasing need for validation of techniques. The Simulated Brain Database (SBD) acts as a stopgap solution to the validation problem. SBD is based on two anatomical models: (i) Normal brain and (ii) MS Lesion.  For both the models, full 3-dimensional data volumes have been simulated using three sequences (T1-, T2-, and proton-density- (PD-) weighted) and a variety of slice thicknesses, noise levels, and levels of intensity non-uniformity.  Unlike the vivo acquired data, here the ground truth is known which helps evaluating the various image analysis methods. 
+
+The MICCAI challenge dataset is actual MRI image scans provided in 3 sequences - T1, T2 and Flair. The actual MRI image scans are obtained from Boston Children's Hospital (CHB) and University of North Carolina, Chapel Hill (UNC). The labels for the data are provided by two or more experts for each brain which results in a rough estimate for the presence of a lesion. We have 10 labeled brain volumes each from CHB and UNC as training data. Additionally, we have 18 unlabeled volumes from CHB and 10 unlabeled volumes from UNC as test data. The difficulty in using the MICCAI challege data is that:
+\begin{enumerate}
+\item Less than 0.1\% of the brain volume is lesions
+\item Different MRI Scanning devices result in different quality of images
+\item No uniformly accepted Ground Truth or Gold Standard for validation
+\end{enumerate}
+
+Since the datasets are heavily biased, we sample the data from one volume on the brain and test on an entirely different volume of the brain. The sampling is done usually in a ratio 1:2 to 1:7 between positive and negative samples of data, where positive samples are considered to be lesions. For testing the classifier, the features are extracted for every pixel and tested on the entire volume of a brain.  
 
 % --------------------------------------- Results ----------------------------------------------------%
 \section{Results}
