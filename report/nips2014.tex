@@ -69,25 +69,32 @@ University of Alberta \\Edmonton, T6E2H2 \\
 \maketitle
 % Abstract
 \begin{abstract}
-The abstract paragraph should be indented 1/2~inch (3~picas) on both left and
-right-hand margins. Use 10~point type, with a vertical spacing of 11~points.
-The word \textbf{Abstract} must be centered, bold, and in point size 12. Two
-line spaces precede the abstract. The abstract must be limited to one
-paragraph.
+Medical Imaging is an emerging field that can help workload for medical professionals and increase outcomes for afflicted individuals. Our focus is on comparing classification techniques for Multiple Sclerosis lesions in order to find the most successful techniques. We also attempt to combine some techniques to improve detection success. Our results confirm the standard that Random Forest typically provides the best results, but that there are other options useful in segmenting lesions. Interestingly, Random Forest also tends to classify quicker than other algorithms, particularly when compared to SVM. This makes it the most practical in terms of accuracy and speed. 
 \end{abstract}
 
 %---------------------------------------- Introduction-------------------------------------------%
 \section{Introduction}
-What is MS? Why it is an interesting problem? Problem definition and motivation. What are the challenges?
+Multiple Sclerosis is a debilitating disease that affects the brain and spinal cord. Technically, MS is an autoimmune disease; the immune system attacks parts of the body, in this case, the protective covering of nerve fibers. If occurrences are bad enough, the nerves can build up scar tissue, which impedes nerve conduction. This scar tissue is what we refer to as lesions. 
+
+One of the most shocking aspects of Multiple Sclerosis is that it primarily affects individuals between the ages of 15 and 40. Women are also twice as likely to be affected by MS. Early detection is key to managing symptoms and controlling disease outcomes. Affected individuals can use exercise, cool temperatures and a balanced diet to help treat symptoms.
+
+To detect Multiple Sclerosis lesions, scans are made of patient brains. Medical professionals analyze these scans, looking for signs of MS. These manual segmentation techniques have several drawbacks, not least among them the time input required by the medical professionals. Manual segmentation also has a high rate of error; only 70\% of lesions are properly detected [CITATION NEEDED]. Automatic segmentation techniques hope to improve these. 
+
+One of the main challenges of automatic segmentation is the low lesion volume in patient brain matter. Typically, only a small percentage of the patients brain has lesions, which can make detecting them difficult. This also poses a problem when gathering positive examples of the lesion. The positive to negative ratio is much lower than in many other segmentation problem spaces. Further, since most patients have very little lesion tissue, over classification can be a problem with automated segmentation. If a healthy brain is scanned and processed, ideally, we would show no lesions. In practice, this is can be very difficult.
 
 \subsection{Related Work}
-Segmentation of Lesions in MRI images is an active area of research. The 3 main objectives are: 1) Extracting features that can differentiate healthy tissues from scar tissues, 2) Selecting the most relevant features that help achieve the task, and 3) Improving the performance of the classification.
+Segmentation of Lesions in MRI images is an active area of research. The 3 main objectives are: 
+\begin{enumerate}
+  \item Extracting features that can differentiate healthy tissues from scar tissues, 
+  \item Selecting the most relevant features that help achieve the task, and
+  \item Improving the performance of the classification.
+\end{enumerate} 
 
 \subsubsection{Review of Segmentation Methods}
-In MS lesion segmentation, classical features are the intensity of each voxel in different modality images. Additionaly, some methods like  \cite{commowick2009continuous}, combined K-NN based on intensities with a template-driven segmentation method to reduce false positive. Others like the method presented in \cite{zijdenbos2002automatic} used the probability of a voxel belonging to tissue class with help of an atlas. Moreover, as another feature, intensity of the six neighbor voxels can be added to feature vector of a point which has been used with an ANN in \cite{younis2007ms}. In \cite{kroon2008multiple}, they used up to 255 features derived from applying different filters on images, and then with the help of principal component analysis (PCA), data is transformed to a new orthogonal coordinates so the first column covers the greatest variance between data; hence, a simple thresholding on the first component of PCA can classify lesions. In \cite{geremia2011spatial}, random decision forest (RDF) is used with local (like intensity) and context-rich (will be discussed later) features. RDF has the advantage of automatically using best features over other methods.
+In MS lesion segmentation, the typical features are the intensity of each voxel in different modality images. Additionally, some methods like  \cite{commowick2009continuous}, combined K-NN based on intensities with a template-driven segmentation method to reduce false positives. Others like the method presented in \cite{zijdenbos2002automatic} used the probability of a voxel belonging to tissue class with help of an atlas. Intensity of the six neighbor voxels can be added to feature vector of a point which has been used with an ANN in \cite{younis2007ms}. In \cite{kroon2008multiple}, they used up to 255 features derived from applying different filters on images, and then with the help of principal component analysis (PCA), data is transformed to new orthogonal coordinates so the first column covers the greatest variance between data; hence, a simple thresholding on the first component of PCA can classify lesions. In \cite{geremia2011spatial}, random decision forest (RDF) is used with local (like intensity) and context-rich (will be discussed later) features. RDF has the advantage of automatically selecting the best features over other methods.
 
 \subsubsection{ Exploring Combinations [PLEASE GIVE YOUR COMMENTS ON THIS PART] }
-Lots of methods has been employed for lesion segmentation as mentioned before; but, no valid comparision is done to measure performance of different classifiers using different features. In this project we try to compare various algorithms' efficiencies on the same dataset and same set of features to explore their properties in the task of lesion segmentation. We use Support Vector Machine (SVM), Neural Networks, K-Neares Neighbors, Random Forest, Markov Random Field, and Logistic Regression as classifier; and Haar-Like, image filters, LM filters, entropy, gaussian based, and atlas as our features. In a broad sense, we tried to extract all possible features to see how the well-known classifiers operate based on them.
+Lots of methods have been employed for lesion segmentation as mentioned before but no valid comparison is done to measure performance of different classifiers using different features. In this project we aim to compare various algorithm's efficiencies on the same data and feature sets to explore their properties in  lesion segmentation. We use Support Vector Machine (SVM), Neural Networks, K-Nearest Neighbors, Random Forest, Markov Random Field, and Logistic Regression as classifiers. For features, we use Haar-Like, image filters, LM filters, entropy, gaussian based, and atlas. In a broad sense, we tried to extract all possible features to see how the well-known classifiers operate based on them.
 
 %------------------------------------------- Features ----------------------------------------------%
 \section{Feature Detection}
