@@ -110,14 +110,13 @@ In the detection phase of the Viola-Jones object detection framework \cite{Viola
 \begin{subfigure}[b]{.4\linewidth}
 \centering
 \includegraphics[scale=0.4]{haar}
-\caption{ A. Calculation of Haar-like feature}
+\caption{ Calculation of Haar-like feature}
 %\label{fig:subim1}
 \end{subfigure}
-
 \begin{subfigure}[b]{.4\linewidth}
 \centering
 \includegraphics[scale=0.4]{HaarFeatures}
-\caption{ B. Different types of Haar-like Features}
+\caption{Different types of Haar-like Features}
 %\label{fig:subim2}
 \end{subfigure}
 
@@ -157,11 +156,11 @@ Reasons for using each classification method. Brief description about them. No n
 \subsection{Random Forests}
 
 \subsection{Markov Random Fields}
-The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the condition that combination of cutted edges is minimum. The advantage of this method is considering neighbors probabilities as a feature.
-In this project, we trained a random forest (which claimed to be the best algorithm for lesion segmentation) and used it to obtain initial probabilities of each voxel belonging to lesion. Then, MRF is applied based on the constructed graph.
+The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. In graph theory, a cut is a partition of the vertices of a graph into two disjoint subsets. An st-cut is a graph cut comprising all directed edges from a node in a vertex set A to a node in its complement, $\overline{A}$, such that s $\epsilon$ A, t $\epsilon$ $\overline{A}$, and A is connected. The cost of a cut is simply defined as the sum of edge weights for the edges removed by the cut. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the Min-Cut problem, i.e, to find the st-cut with minimal cost. The advantage of this method is that it considers the probabilities of its neighbours as a feature.
+
+In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey []) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier..
 
 \subsection{Logistic Regression}
-
 
 %-----------------------------------Experiment Design -------------------------------------------------------%
 \section{Experiment Design}
@@ -213,7 +212,23 @@ Sensitivity affords no penalty to misclassifying healthy brain as lesion. This m
 As a simple evaluation measure, we count the number of properly classified lesions. A lesion is considered classified if we find even a single pixel of lesion within it. This makes it unreliable in terms of overall performance, but it is a valuable metric for basic testing of classifiers.
 
 \subsection{Training and Test Data}
-BrainWeb and Miccai Challenge Data. Explain how sampling is done on data to train the classifier. 
+%BrainWeb and Miccai Challenge Data. Explain how sampling is done on data to train the classifier.
+The quantitative analysis of the MRI images is done using data provided by two sources:
+\begin{enumerate}
+\item Brain Web - MS Lesion Brain Database, McGill University
+\item MICCAI Challenge 2008 Dataset
+\end{enumerate}
+
+There exists no common ground truth or gold standard in most medical analysis tasks which results in an increasing need for validation of techniques. The Simulated Brain Database (SBD) acts as a stopgap solution to the validation problem. SBD is based on two anatomical models: (i) Normal brain and (ii) MS Lesion.  For both the models, full 3-dimensional data volumes have been simulated using three sequences (T1-, T2-, and proton-density- (PD-) weighted) and a variety of slice thicknesses, noise levels, and levels of intensity non-uniformity.  Unlike the vivo acquired data, here the ground truth is known which helps evaluating the various image analysis methods. 
+
+The MICCAI challenge dataset is actual MRI image scans provided in 3 sequences - T1, T2 and Flair. The actual MRI image scans are obtained from Boston Children's Hospital (CHB) and University of North Carolina, Chapel Hill (UNC). The labels for the data are provided by two or more experts for each brain which results in a rough estimate for the presence of a lesion. We have 10 labeled brain volumes each from CHB and UNC as training data. Additionally, we have 18 unlabeled volumes from CHB and 10 unlabeled volumes from UNC as test data. The difficulty in using the MICCAI challege data is that:
+\begin{enumerate}
+\item Less than 0.1\% of the brain volume is lesions
+\item Different MRI Scanning devices result in different quality of images
+\item No uniformly accepted Ground Truth or Gold Standard for validation
+\end{enumerate}
+
+Since the datasets are heavily biased, we sample the data from one volume on the brain and test on an entirely different volume of the brain. The sampling is done usually in a ratio 1:2 to 1:7 between positive and negative samples of data, where positive samples are considered to be lesions. For testing the classifier, the features are extracted for every pixel and tested on the entire volume of a brain.  
 
 % --------------------------------------- Results ----------------------------------------------------%
 \section{Results}
