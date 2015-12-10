@@ -91,7 +91,7 @@ Segmentation of Lesions in MRI images is an active area of research. The 3 main 
 \end{enumerate} 
 
 \subsubsection{Review of Segmentation Methods}
-In MS lesion segmentation, the typical features are the intensity of each voxel in different modality images. Additionally, some methods like  \cite{commowick2009continuous}, combined K-NN based on intensities with a template-driven segmentation method to reduce false positives. Others like the method presented in \cite{zijdenbos2002automatic} used the probability of a voxel belonging to tissue class with help of an atlas. Intensity of the six neighbour voxels can be added to feature vector of a point which has been used with an ANN in \cite{younis2007ms}. In \cite{kroon2008multiple}, they used up to 255 features derived from applying different filters on images, and then with the help of principal component analysis (PCA), data is transformed to new orthogonal coordinates so the first column covers the greatest variance between data; hence, a simple thresholding on the first component of PCA can classify lesions. In \cite{geremia2011spatial}, random decision forest (RDF) is used with local (like intensity) and context-rich (will be discussed later) features. RDF has the advantage of automatically selecting the best features over other methods.
+In MS lesion segmentation, the typical features are the intensity of each voxel in different modality images. Additionally, some methods like  \cite{commowick2009continuous}, combined K-NN based on intensities with a template-driven segmentation method to reduce false positives. Others like the method presented in \cite{zijdenbos2002automatic} used the probability of a voxel belonging to tissue class with help of an atlas. Intensity of the six neighbor voxels can be added to feature vector of a point which has been used with an ANN in \cite{younis2007ms}. In \cite{kroon2008multiple}, they used up to 255 features derived from applying different filters on images, and then with the help of principal component analysis (PCA), data is transformed to new orthogonal coordinates so the first column covers the greatest variance between data; hence, a simple thresholding on the first component of PCA can classify lesions. In \cite{geremia2011spatial}, random decision forest (RDF) is used with local (like intensity) and context-rich (will be discussed later) features. RDF has the advantage of automatically selecting the best features over other methods.
 
 \subsubsection{ Exploring Combinations [PLEASE GIVE YOUR COMMENTS ON THIS PART] }
 Lots of methods have been employed for lesion segmentation as mentioned before but no valid comparison is done to measure performance of different classifiers using different features. In this project we aim to compare various algorithm's efficiencies on the same data and feature sets to explore their properties in  lesion segmentation. We use Support Vector Machine (SVM), Neural Networks, K-Nearest Neighbors, Random Forest, Markov Random Field, and Logistic Regression as classifiers. For features, we use Haar-Like, image filters, LM filters, entropy, gaussian based, and atlas. In a broad sense, we tried to extract all possible features to see how the well-known classifiers operate based on them.
@@ -99,13 +99,12 @@ Lots of methods have been employed for lesion segmentation as mentioned before b
 %------------------------------------------- Features ----------------------------------------------%
 \section{Feature Detection}
 %What is feature extraction? Why is it important? Reasons for using the particular features
-Image analysis aims at reducing information to a subset that is relevant to the task in hand. Information reduction often happens gradually with information being reduced until the desired result is extracted from the data. \cite{toennies2012guide} The first level of reduction computes local features that
-are assumed to pertain to objects of interest. 
+Image analysis aims at reducing information to a subset that is relevant to the task in hand. Information reduction often happens gradually with information being reduced until the desired result is extracted from the data. \cite{toennies2012guide} The first level of reduction computes local features that are assumed to pertain to objects of interest. We use 4 different classes of features here in order to segment the MRI images. The features we use for the given task were selected based on the literature survey for MS Lesion segmentation described in the Related Work section. The general characteristics and reasons for why the particular class of features work is described below.  
+
 \subsection{Context (Haar-Like Features)}
-In the detection phase of the Viola-Jones object detection framework \cite{Viola-Jones}, a window of the target size is moved over the input image, and for each subsection of the image the Haar-like feature is calculated. This difference is then compared to a learned threshold that separates non-objects from objects. Because such a Haar-like feature is only a weak learner or classifier (its detection quality is slightly better than random guessing) a large number of Haar-like features are necessary to describe an object with sufficient accuracy. 
+In the detection phase of the Viola-Jones object detection framework \cite{Viola-Jones}, a window of the target size is moved over the input image, and for each subsection of the image the Haar-like feature is calculated. This difference is then compared to a learned threshold that separates non-objects from objects. Because such a Haar-like feature is only a weak learner or classifier (its detection quality is slightly better than random guessing) a large number of Haar-like features are necessary to describe an object with sufficient accuracy. Context-rich features exhibit high variability. This variability combined with their ability to highlight regions which differ from their neighborhood explains why they were chosen. Together with local features (voxel intensities), context-rich features learn a multichannel appearance model conditioned by tissue spatial priors.\cite{geremia2011spatial}
 
 \begin{figure}[h]
-
 \centering
 \begin{subfigure}[b]{.4\linewidth}
 \centering
@@ -119,7 +118,6 @@ In the detection phase of the Viola-Jones object detection framework \cite{Viola
 \caption{Different types of Haar-like Features}
 %\label{fig:subim2}
 \end{subfigure}
-
 \caption{Haar-Like Features}
 \end{figure}
 
@@ -127,11 +125,11 @@ In the detection phase of the Viola-Jones object detection framework \cite{Viola
 Filtering is a technique used for modifying or enhancing an image. It can be used to emphasize certain features or remove other features in an image. In image processing filters are mainly used to suppress either the high frequencies in the image, i.e. smoothing the image, or the low frequencies, i.e. enhancing or detecting edges in the image. We extract the features through Linear filtering of the MRI image using convolution. 
 
 \subsubsection{Leung-Malik (LM) Filter Bank}
-We use the filter bank provided by the Visual Geometry Group at the University of Oxford [] to obtain a set of features. The LM set is a multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. The filters occur at the basic scales $\sigma$ = {$\sqrt{2}$,2,2$\sqrt{2}$,4}. The Gaussians occur at the four basic scales while the 8 LOG filters occur at $\sigma$ and 3$\sigma$.
-
+We use the filter bank provided by the Visual Geometry Group at the University of Oxford [] to obtain a set of features. The LM set is a multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. The filters occur at the basic scales $\sigma$ = {$\sqrt{2}$,2,2$\sqrt{2}$,4}. The Gaussians occur at the four basic scales while the 8 LOG filters occur at $\sigma$ and 3$\sigma$. The algorithm proposed by Leung and Malik \cite{lmfilters} demonstrated excellent
+results for recognizing 3D textures from a single image under any lighting and viewing geometry. Since different MRI scanners produce different quality of images, the LM filters should be able to recognize different textures, i.e., lesions in the brain.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{lmfilters}
+\includegraphics[scale=0.4]{lmfilters.jpg}
 \caption{The LM filter bank has a mix of edge, bar and spot filters at multiple scales and orientations. It has a total of 48 filters}
 \label{fig:LM filters}
 \end{figure}
@@ -154,15 +152,11 @@ Reasons for using each classification method. Brief description about them. No n
 \subsection{k-Nearest Neighbours}
 
 \subsection{Random Forests}
-reason for using random forest instead of a single decision tree: decision trees are known to suffer from overfitting, so it is better to have a forest and ensemble many decision tree. based on \cite{geremia2011spatial}
 
 \subsection{Markov Random Fields}
-
 The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. In graph theory, a cut is a partition of the vertices of a graph into two disjoint subsets. An st-cut is a graph cut comprising all directed edges from a node in a vertex set A to a node in its complement, $\overline{A}$, such that s $\epsilon$ A, t $\epsilon$ $\overline{A}$, and A is connected. The cost of a cut is simply defined as the sum of edge weights for the edges removed by the cut. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the Min-Cut problem, i.e, to find the st-cut with minimal cost. The advantage of this method is that it considers the probabilities of its neighbours as a feature.
 
-In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey \cite{garcia2013review}) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier..
-
-
+In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey \cite{garcia2013review}) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier.
 \subsection{Logistic Regression}
 
 %-----------------------------------Experiment Design -------------------------------------------------------%
@@ -259,14 +253,15 @@ Logistic Regression & 0 & 0 & 0 & 0 \\
 \end{center}
 
 \subsection{State of the art results}
-The best results for segmenting MS lesions reported until now comes from random forest algorithm explained in \cite{geremia2011spatial}. Their proposed method contains of 30 separated decision trees with maximum depth of 20; each tree has a lower bound for information gain which stops it from further growing. They used two types of features, local features which are intensities and context-rich features which combine intensity of a single voxel with distant regions. This method is tested on MICCAI grand challenge 2008 and they got a dice score of $39.39 \pm 18.4$. This result comes from doing a 3-fold cross-validation, meaning model is trained on two different brains and tested on the third one and the procedure repeats for three times.\\
-The important thing they revealed about MS lesion segmentation task is its need of having as more comprehensive training set as possible. They demonstrated that classifier with their selected features cannot detect lesions in locations which are not represented in training data.
+Brief description of the benchmark
 
 \subsection{Discussion}
 Detailed analysis of the results we get from different results
 
 %-------------------------------------- Conclusion ------------------------------------------%
 \section{Conclusion}
+
+
 
 % ---------------------------------------- Acknowledgements ----------------------------------%
 \section{Acknowledgements}
