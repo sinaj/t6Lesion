@@ -67,7 +67,7 @@ University of Alberta \\Edmonton, T6E2H2 \\
 \maketitle
 % Abstract
 \begin{abstract}
-Medical Imaging is an emerging field that can help workload for medical professionals and increase outcomes for afflicted individuals. Our focus is on comparing classification techniques for Multiple Sclerosis lesions in order to find the most successful techniques. We also attempt to combine some techniques to improve detection success. Our results confirm the standard that Random Forest typically provides the best results, but that there are other options useful in segmenting lesions. Interestingly, Random Forest also tends to classify quicker than other algorithms, particularly when compared to SVM. This makes it the most practical in terms of accuracy and speed. 
+Medical Imaging is an emerging field that can help reduce workload for medical professionals and increase outcomes for afflicted individuals. Our focus is on comparing classification techniques for Multiple Sclerosis lesions in order to find the most successful techniques. We also attempt to combine some techniques to improve detection success. Our results confirm the standard that Random Forest typically provides the best results, but that there are other options useful in segmenting lesions. Interestingly, Random Forest also tends to classify more quickly than other algorithms, particularly when compared to SVM. This makes it the most practical in terms of both accuracy and speed. 
 \end{abstract}
 
 %---------------------------------------- Introduction-------------------------------------------%
@@ -77,9 +77,9 @@ Multiple Sclerosis is a debilitating disease that affects the brain and spinal c
 
 One of the most shocking aspects of Multiple Sclerosis is that it primarily affects individuals between the ages of 15 and 40. Women are also twice as likely to be affected by MS. Early detection is key to managing symptoms and controlling disease outcomes. Affected individuals can use exercise, cool temperatures and a balanced diet to help treat symptoms.
 
-To detect Multiple Sclerosis lesions, scans are made of patient brains. Medical professionals analyze these scans, looking for signs of MS. These manual segmentation techniques have several drawbacks, not least among them the time input required by the medical professionals. Manual segmentation also has a high rate of error; only 70\% of lesions are properly detected [CITATION NEEDED]. Automatic segmentation techniques hope to improve these. 
+To detect Multiple Sclerosis lesions, scans are made of patient brains. Medical professionals analyze these scans, looking for signs of MS. These manual segmentation techniques have several drawbacks, not least among them the time input required by the medical professionals. Manual segmentation also has a high rate of error; only 70\% of lesions are properly detected. Automatic segmentation techniques hope to alleviate these issues. 
 
-One of the main challenges of automatic segmentation is the low lesion volume in patient brain matter. Typically, only a small percentage of the patients brain has lesions, which can make detecting them difficult. This also poses a problem when gathering positive examples of the lesion. The positive to negative ratio is much lower than in many other segmentation problem spaces. Further, since most patients have very little lesion tissue, over classification can be a problem with automated segmentation. If a healthy brain is scanned and processed, ideally, we would show no lesions. In practice, this is can be very difficult.
+One of the main challenges of automatic segmentation is the low lesion volume in patient brain matter. Typically, only a small percentage of the patients brain has lesions, which can make detecting them difficult. This also poses a problem when gathering positive examples of the lesion. The positive to negative ratio is much lower than in many other segmentation problem spaces. Further, since most patients have very little lesion tissue, over classification can be a problem with automated segmentation. If a healthy brain is scanned and processed, ideally, we would show no lesions. In practice, this can be very difficult.
 
 
 \subsection{Related Work}
@@ -163,7 +163,7 @@ The basic principle of Markov Random Field is to treat the input image as a grap
 In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey \cite{garcia2013review}) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier.
 
 \subsection{Logistic Regression} 
-The model fits a line to separate the classes of data. It is an easy to implement model and if it has sufficient features is capable of doing well on the task. We learn the hyper-plain through our train data and classify test data based on the which direction of the hyper-plain the fall into.
+The model fits a line to separate the classes of data. It is easily implemented and if it has sufficient features, is capable of doing well in our problem space. We learn the hyper-plane through our train data and classify test data based on the direction of the hyper-plain they fall into. A particular area of interest is how MRF improves logistic regression when used in sequence.
 
 
 %-----------------------------------Experiment Design -------------------------------------------------------%
@@ -225,7 +225,7 @@ The quantitative analysis of the MRI images is done using data provided by two s
 
 There exists no common ground truth or gold standard in most medical analysis tasks which results in an increasing need for validation of techniques. The Simulated Brain Database (SBD) acts as a stopgap solution to the validation problem. SBD is based on two anatomical models: (i) Normal brain and (ii) MS Lesion.  For both the models, full 3-dimensional data volumes have been simulated using three sequences (T1-, T2-, and proton-density- (PD-) weighted) and a variety of slice thicknesses, noise levels, and levels of intensity non-uniformity.  Unlike the vivo acquired data, here the ground truth is known which helps evaluating the various image analysis methods. 
 
-The MICCAI challenge dataset is actual MRI image scans provided in 3 sequences - T1, T2 and Flair. The actual MRI image scans are obtained from Boston Children's Hospital (CHB) and University of North Carolina, Chapel Hill (UNC). The labels for the data are provided by two or more experts for each brain which results in a rough estimate for the presence of a lesion. We have 10 labeled brain volumes each from CHB and UNC as training data. Additionally, we have 18 unlabeled volumes from CHB and 10 unlabeled volumes from UNC as test data. The difficulty in using the MICCAI challege data is that:
+The MICCAI challenge dataset is actual MRI image scans provided in 3 sequences - T1, T2 and Flair. The actual MRI image scans are obtained from Boston Children's Hospital (CHB) and University of North Carolina, Chapel Hill (UNC). The labels for the data are provided by two or more experts for each brain which results in a rough estimate for the presence of a lesion. We have 10 labeled brain volumes each from CHB and UNC as training data. Additionally, we have 18 unlabeled volumes from CHB and 10 unlabeled volumes from UNC as test data. The difficulty in using the MICCAI challenge data is that:
 \begin{enumerate}
 \item Less than 0.1\% of the brain volume is lesions
 \item Different MRI Scanning devices result in different quality of images
