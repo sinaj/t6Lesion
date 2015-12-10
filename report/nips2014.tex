@@ -145,19 +145,26 @@ All the features need to explained briefly with good images.
 
 Reasons for using each classification method. Brief description about them. No need for images here I guess.  
 
-\subsection{Support Vector Machines}
+\subsection{Support Vector Machines} 
+SVMs try to split the positive and negative data using a hyper-plain which applies very well on complex tasks when implemented with kernels. The model is both power-ful and unlikely to over-fit, but it is sensitive to ratio of positive and negative data (pos/neg) as it weights them equally. In our case, we need a model to learn lots of negative data, healthy brain patches, and a few positive data; hence, we should sample training data not unbalanced than ratio of 2 to 1.
 
-\subsection{Neural Networks}
+\subsection{ Neural Networks} 
+The most important property of neural networks is the ability to identify a good estimation even for complex functions. Basically in Neural Networks we have a few layers. The first layer is our features (input) and the last layers is related to the labels (output). We also have a few hidden layers between these two. Considering this structure we can make almost all functions, even the most complex ones. That’s the reason for choosing this method. In this project we tried Neural Networks with 2 and three hidden layers.
 
-\subsection{k-Nearest Neighbours}
+\subsection{k-Nearest Neighbours} 
+Nearest Neighbours approach decides on the label of a certain data-point by counting votes of its k closest points. The model is completely dependent on the distance measure used to find close points. It is an easy to implement model and does not require training. To make a decision on each voxel we take the majority of votes from nearest points in the dataset. 
 
-\subsection{Random Forests}
+\subsection{Random Forests} 
+The model is based on taking votes of a set of decision trees on each voxel. One of the best properties of RFs is that they are less sensitive of imbalanced ratio of positive and negative data compared to other models. Also, it provides the best features which split the classes better and scores the features based on how helpful they are in classification. Furthermore, it is hard for RFs to overfit while they fit complex models as a result of using different trees to make the overall decision. We learn the random forest and create the trees by distributing points in their leafs and predict by merging votes of each tree to label the data.
 
 \subsection{Markov Random Fields}
 The basic principle of Markov Random Field is to treat the input image as a graph in which each voxel is a node and all the neighboring voxels are interconnected. In the case of foreground segmentation, two spatial nodes of foreground and background are added to the graph and edges between voxels. Each pair of nodes are assigned a weight equal to the probability that a given voxel belongs to either foreground or background. In graph theory, a cut is a partition of the vertices of a graph into two disjoint subsets. An st-cut is a graph cut comprising all directed edges from a node in a vertex set A to a node in its complement, $\overline{A}$, such that s $\epsilon$ A, t $\epsilon$ $\overline{A}$, and A is connected. The cost of a cut is simply defined as the sum of edge weights for the edges removed by the cut. The aim of this algorithm is to use a graph-cut to divide graph into two classes subject to the Min-Cut problem, i.e, to find the st-cut with minimal cost. The advantage of this method is that it considers the probabilities of its neighbours as a feature.
 
 In this project, we trained a random forest (Claimed to be the best algorithm for lesion segmentation according to literature survey \cite{garcia2013review}) and used it to obtain initial probabilities of each voxel classified as a lesion. Subsequently, MRF is applied on the graph constructed using the weights,i.e., probabilities obtained from the classifier.
-\subsection{Logistic Regression}
+
+\subsection{Logistic Regression} 
+The model fits a line to separate the classes of data. It is an easy to implement model and if it has sufficient features is capable of doing well on the task. We learn the hyper-plain through our train data and classify test data based on the which direction of the hyper-plain the fall into.
+
 
 %-----------------------------------Experiment Design -------------------------------------------------------%
 \section{Experiment Design}
