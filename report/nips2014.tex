@@ -8,7 +8,7 @@
 \usepackage{amsmath}               % great math stuff
 \usepackage{amsfonts}              % for blackboard bold, etc
 \usepackage{amsthm}                % better theorem environments
-
+\usepackage{verbatim}
 \usepackage{notoccite}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{array}
@@ -130,18 +130,20 @@ Filtering is a technique used for modifying or enhancing an image. It can be use
 \subsubsection{Leung-Malik (LM) Filter Bank}
 We use the filter bank provided by the Visual Geometry Group at the University of Oxford to obtain a set of features. The LM set is a multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. The filters occur at the basic scales $\sigma$ = {$\sqrt{2}$,2,2$\sqrt{2}$,4}. The Gaussians occur at the four basic scales while the 8 LOG filters occur at $\sigma$ and 3$\sigma$. The algorithm proposed by Leung and Malik \cite{LMfilters} demonstrated excellent
 results for recognizing 3D textures from a single image under any lighting and viewing geometry. Since different MRI scanners produce different quality of images, the LM filters should be able to recognize different textures, i.e., lesions in the brain.
+\begin{comment}
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.3]{lmfilters.jpg}
 \caption{LM filters - Edge, bar and spot filters at multiple scales and orientations.}
 \label{fig:LM filters}
 \end{figure}
+\end{comment}
 
 \subsection{Entropy \& Gaussian based Features}
 
 Entropy measures the randomness of each of the pixel.It accounts for all the randomness for a patch, that can be varied. Entropy of each of the pixel depends on 5*5 patch surrounding neighbour point. One of the main reasons to choose entropy as a feature is, the pixel not only accounts for its own value, but also considers the surroundings, which helps the classifier to train better.
 Guassian features are nothing but,a filter  that filters the image with a 2-D Gaussian smoothing kernel with standard deviation of 0.5.The sigma can vary, we chose it to be 2 for our experiment.
-
+\begin{comment}
 \begin{figure}[h]
 \centering
 \begin{subfigure}[b]{.4\linewidth}
@@ -158,6 +160,7 @@ Guassian features are nothing but,a filter  that filters the image with a 2-D Ga
 \end{subfigure}
 \caption{Entropy \& Gaussian based Features}
 \end{figure}
+\end{comment}
 
 
 \subsection{Atlas Features}
@@ -192,7 +195,6 @@ We use FNIRT (non-linear) \cite{fnirt} of fsl\cite{fsl1}\cite{fsl2}\cite{fsl3} t
 \section{Classifiers}
 %Reasons for using each classification method. Brief description about them. No need for images here I guess.
 
-The general characteristics of each classifier used and the reasons for choosing them for the given task is given below. 
 \subsection{Support Vector Machines (SVM)} 
 SVMs try to split the positive and negative data using a hyper-plane which works very well on complex tasks when implemented with kernels. The model is both powerful and unlikely to over-fit. But it is sensitive to the ratio of positive and negative data (pos/neg) as it weights them equally. In our case, we need a model to learn lots of negative data, healthy brain patches, and a few positive data samples. Hence, we sample the training data such that it is not unbalanced, i.e., never more than a ratio of 2 to 1.
 
@@ -219,9 +221,7 @@ The model fits a line to separate the classes of data. It is easily implemented 
 %Pipeline Diagram is required here
 
 \subsection{Validation Measures}
-For each pixel of the brain, our classifiers must label it as either lesion or healthy brain matter. Depending on the data set used, our ground truth source may be different. The MICCAI data set is provided by doctors and has also been cross referenced several times. The hope is that this increases the accuracy of the results. The MICCAI dataset represents real brain scans. Brain Web on the other hand uses a simulated brain scan and places lesions in the simulated scans.
-
-When comparing our output to the ground truth, we come up with 4 possibilities for each region of the brain scan:
+For each pixel of the brain, our classifiers must label it as either lesion or healthy brain matter. When comparing our output to the ground truth, we come up with 4 possibilities for each region of the brain scan:
 \begin{enumerate}
   \item True Positive - The ground truth and our detection agrees the region is a lesion.
   \item True Negative - The ground truth and our detection agrees the region is healthy.
